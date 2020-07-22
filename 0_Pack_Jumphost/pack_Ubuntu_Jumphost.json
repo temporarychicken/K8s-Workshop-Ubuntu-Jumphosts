@@ -1,0 +1,88 @@
+{
+  "description": "Create an Ubuntu Desktop Server for use as a Workshop Jumphost",
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "region": "eu-west-2"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "name": "ubuntu-jumphost",
+      "ami_name": "JumpHost Ubuntu Desktop {{isotime \"2006-01-02\"}}{{uuid}}",
+      "instance_type": "t2.micro",
+      "region": "{{user `region`}}",
+      "source_ami": "ami-006a0174c6c25ac06",
+      "ssh_username": "ubuntu",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "tags": {
+        "Name": "ubuntu-jumphost"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "{{user `home`}}/.ssh/ngx-certs",
+      "destination": "~/.ssh/ngx-certs",
+      "only": [
+        "ubuntu-jumphost"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+		"curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'",
+		"sudo apt-get install unzip -y",
+        "unzip awscliv2.zip",
+        "sudo ./aws/install",
+		"#until sudo apt-get upgrade -y; do sleep 10; done",
+	    "until sudo apt-get update -y; do sleep 10; done",
+		"#sudo apt-get install ubuntu-desktop -y",
+        "#sudo apt-get install tightvncserver -y",
+        "#sudo apt-get install gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y",
+		
+		"sudo apt-get install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y",
+		"sudo apt-get install xrdp -y",
+		"sudo systemctl status xrdp",
+		"sudo adduser xrdp ssl-cert",
+		"sudo systemctl restart xrdp",
+		"sudo ufw allow 3389",
+		"wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb",
+        "until sudo apt-get update -y; do sleep 10; done",
+		"sudo apt-get install ./google-chrome-stable_current_amd64.deb -y",
+        "sudo -H apt-get install -y python-pip",
+        "sudo -H pip install ansible",
+		"ansible-galaxy install nginxinc.nginx",
+        "until sudo apt-get update -y; do sleep 10; done",
+
+		"ssh-keygen -f /tmp/sshkey -q -N ''",
+		"chmod +r /tmp/sshkey"
+      ],
+      "only": [
+        "ubuntu-jumphost"
+      ]
+    },
+   {
+      "type": "file",
+      "destination": "{{user `home`}}/.ssh/jumphost-key.pub",
+      "source": "/tmp/sshkey.pub",
+	  "direction" : "download",
+      "only": [
+        "ubuntu-jumphost"
+      ]
+    },
+   {
+      "type": "file",
+      "destination": "{{user `home`}}/.ssh/jumphost-key.pem",
+      "source": "/tmp/sshkey",
+	  "direction" : "download",
+      "only": [
+        "ubuntu-jumphost"
+      ]
+    }
+	
+  ]
+}

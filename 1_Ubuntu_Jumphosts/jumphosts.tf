@@ -1,15 +1,15 @@
 
 
 resource "aws_instance" "jumphostn" {
-  count         = "${var.instance_count}"
-  ami                         = "ami-006a0174c6c25ac06" # eu-west-2
-  instance_type               = "t2.medium"
+  count                       = var.instance_count
+  ami                         = data.aws_ami.ubuntu_jumphost.image_id # eu-west-2
+  instance_type               = "t2.large"
   key_name                    = "jumphost-key"
   associate_public_ip_address = true
   security_groups             = [ aws_security_group.jumphostsg.name ]
-  #subnet_id                   = aws_subnet.main.id
-  #get_password_data           = true
-  #private_ip                  = "10.0.0.40"
+  #subnet_id                  = aws_subnet.main.id
+  #get_password_data          = true
+  #private_ip                 = "10.0.0.40"
 
 
  
@@ -24,24 +24,32 @@ resource "aws_instance" "jumphostn" {
 
 
 variable "instance_count" {
-  default = "2"
+  default = "12"
 }
 
-output "dnsname0" {
-  value = "${aws_instance.jumphostn[0].public_dns}"
-}
-  output "dnsname1" {
-  value = "${aws_instance.jumphostn[1].public_dns}"
-}  
+output "dnsname0" { value = "${aws_instance.jumphostn[0].public_dns}" }
+output "dnsname1" { value = "${aws_instance.jumphostn[1].public_dns}" }
+output "dnsname2" { value = "${aws_instance.jumphostn[2].public_dns}" }
+output "dnsname3" { value = "${aws_instance.jumphostn[3].public_dns}" }
+output "dnsname4" { value = "${aws_instance.jumphostn[4].public_dns}" }
+output "dnsname5" { value = "${aws_instance.jumphostn[5].public_dns}" }
+output "dnsname6" { value = "${aws_instance.jumphostn[6].public_dns}" }
+output "dnsname7" { value = "${aws_instance.jumphostn[7].public_dns}" }
+output "dnsname8" { value = "${aws_instance.jumphostn[8].public_dns}" }
+output "dnsname9" { value = "${aws_instance.jumphostn[9].public_dns}" }
+output "dnsname10" { value = "${aws_instance.jumphostn[10].public_dns}" }
+output "dnsname11" { value = "${aws_instance.jumphostn[11].public_dns}" }
 
 
 
+#output "connect_to_server_ssh" { value = "\nssh -i ~/.ssh/jumphost-key.pem ubuntu@${aws_instance.jumphostn[0].public_ip}" }
 
 
 resource "null_resource" "jumphostzero" {
   # Changes to any instance of the cluster requires re-provisioning
+  count = var.instance_count
   triggers = {
-    trigger1 = aws_instance.jumphostn[0].public_dns
+    trigger1 = aws_instance.jumphostn[count.index].public_dns
   }
   
   provisioner "remote-exec" {
@@ -50,30 +58,21 @@ resource "null_resource" "jumphostzero" {
     type     = "ssh"
     user     = "ubuntu"
 	private_key = file("jumphosts")
-    host     = aws_instance.jumphostn[0].public_ip
+    host     = aws_instance.jumphostn[count.index].public_ip
   }
   
         inline = [
-		"until sudo apt-get upgrade -y; do sleep 10; done",
-	    "until sudo apt-get update -y; do sleep 10; done",
-		"#sudo apt install ubuntu-desktop -y",
-        "#sudo apt install tightvncserver -y",
-        "#sudo apt install gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y",
+
+		"sudo echo -e 'ubuntu\nubuntu' | (sudo passwd ubuntu)",
 		
-		"sudo apt install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y",
-		"sudo apt install xrdp -y",
-		"sudo systemctl status xrdp -y",
-		"sudo adduser xrdp ssl-cert -y",
-		"sudo systemctl restart xrdp",
-		"sudo ufw allow 3389",
-		"echo -e 'ubuntu\nubuntu' | (sudo passwd ubuntu)",
-		"wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb",
-        "until sudo apt-get update -y; do sleep 10; done",
-		"sudo apt install ./google-chrome-stable_current_amd64.deb -y",
-		"echo -e 'ubuntu\nubuntu' | sudo passwd ubuntu",
-		"sudo apt-get install ansible -y",
-		"ansible-galaxy install nginxinc.nginx",
-		"sudo apt-get install aws -y"
+		"wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip",
+		"unzip terraform_0.12.28_linux_amd64.zip",
+		"sudo cp terraform /usr/local/bin/",
+
+        "wget https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip",
+		"unzip packer_1.6.0_linux_amd64.zip",
+		"sudo cp packer /usr/local/bin/"
+
     ]
   }
 }
