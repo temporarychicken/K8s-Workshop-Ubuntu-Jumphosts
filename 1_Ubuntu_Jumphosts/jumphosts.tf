@@ -63,15 +63,8 @@ resource "null_resource" "jumphostzero" {
   
         inline = [
 
-		"sudo echo -e 'ubuntu\nubuntu' | (sudo passwd ubuntu)",
+		"sudo echo -e 'ubuntuworkshop\nubuntuworkshop' | (sudo passwd ubuntu)"
 		
-		"wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip",
-		"unzip terraform_0.12.28_linux_amd64.zip",
-		"sudo cp terraform /usr/local/bin/",
-
-        "wget https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip",
-		"unzip packer_1.6.0_linux_amd64.zip",
-		"sudo cp packer /usr/local/bin/"
 
     ]
   }
