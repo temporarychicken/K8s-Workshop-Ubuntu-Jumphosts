@@ -24,21 +24,21 @@ resource "aws_instance" "jumphostn" {
 
 
 variable "instance_count" {
-  default = "12"
+  default = "2"
 }
 
 output "dnsname0" { value = "${aws_instance.jumphostn[0].public_dns}" }
 output "dnsname1" { value = "${aws_instance.jumphostn[1].public_dns}" }
-output "dnsname2" { value = "${aws_instance.jumphostn[2].public_dns}" }
-output "dnsname3" { value = "${aws_instance.jumphostn[3].public_dns}" }
-output "dnsname4" { value = "${aws_instance.jumphostn[4].public_dns}" }
-output "dnsname5" { value = "${aws_instance.jumphostn[5].public_dns}" }
-output "dnsname6" { value = "${aws_instance.jumphostn[6].public_dns}" }
-output "dnsname7" { value = "${aws_instance.jumphostn[7].public_dns}" }
-output "dnsname8" { value = "${aws_instance.jumphostn[8].public_dns}" }
-output "dnsname9" { value = "${aws_instance.jumphostn[9].public_dns}" }
-output "dnsname10" { value = "${aws_instance.jumphostn[10].public_dns}" }
-output "dnsname11" { value = "${aws_instance.jumphostn[11].public_dns}" }
+#output "dnsname2" { value = "${aws_instance.jumphostn[2].public_dns}" }
+#output "dnsname3" { value = "${aws_instance.jumphostn[3].public_dns}" }
+#output "dnsname4" { value = "${aws_instance.jumphostn[4].public_dns}" }
+#output "dnsname5" { value = "${aws_instance.jumphostn[5].public_dns}" }
+#output "dnsname6" { value = "${aws_instance.jumphostn[6].public_dns}" }
+#output "dnsname7" { value = "${aws_instance.jumphostn[7].public_dns}" }
+#output "dnsname8" { value = "${aws_instance.jumphostn[8].public_dns}" }
+#output "dnsname9" { value = "${aws_instance.jumphostn[9].public_dns}" }
+#output "dnsname10" { value = "${aws_instance.jumphostn[10].public_dns}" }
+#output "dnsname11" { value = "${aws_instance.jumphostn[11].public_dns}" }
 
 
 

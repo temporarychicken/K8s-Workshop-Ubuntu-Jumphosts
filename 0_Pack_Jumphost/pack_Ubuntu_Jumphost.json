@@ -43,8 +43,9 @@
 		"#sudo apt-get install ubuntu-desktop -y",
         "#sudo apt-get install tightvncserver -y",
         "#sudo apt-get install gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y",
-		
-		"sudo apt-get install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y",
+		       
+		"until sudo apt-get install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y; do sleep 10; done",
+		"#sudo apt-get install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y",
 		"sudo apt-get install xrdp -y",
 		"sudo systemctl status xrdp",
 		"sudo adduser xrdp ssl-cert",
@@ -67,6 +68,9 @@
         "wget https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip",
 		"unzip packer_1.6.0_linux_amd64.zip",
 		"sudo cp packer /usr/local/bin/",
+		
+		"sudo apt-get install jq -y",
+		"sudo apt-get install python-jmespath -y",
 
 		"ssh-keygen -f /tmp/sshkey -q -N ''",
 		"chmod +r /tmp/sshkey"
