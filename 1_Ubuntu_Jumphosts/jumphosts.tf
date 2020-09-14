@@ -2,7 +2,7 @@
 
 resource "aws_instance" "jumphostn" {
   count                       = var.instance_count
-  ami                         = data.aws_ami.ubuntu_jumphost.image_id # eu-west-2
+  ami                         = data.aws_ami.ubuntu_jumphost.image_id # eu-west-1
   instance_type               = "t2.large"
   key_name                    = "jumphost-key"
   associate_public_ip_address = true

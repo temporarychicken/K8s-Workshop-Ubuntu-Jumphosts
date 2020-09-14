@@ -4,7 +4,7 @@
     "home": "{{env `HOME`}}",
     "aws_access_key": "",
     "aws_secret_key": "",
-    "region": "eu-west-2"
+    "region": "eu-west-1"
   },
   "builders": [
     {
@@ -13,12 +13,12 @@
       "ami_name": "JumpHost Ubuntu Desktop {{isotime \"2006-01-02\"}}{{uuid}}",
       "instance_type": "t2.micro",
       "region": "{{user `region`}}",
-      "source_ami": "ami-006a0174c6c25ac06",
+      "source_ami": "ami-04137ed1a354f54c4",
       "ssh_username": "ubuntu",
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "tags": {
-        "Name": "ubuntu-jumphost"
+        "Name": "ubuntu-jumphost-Dublin"
       }
     }
   ],

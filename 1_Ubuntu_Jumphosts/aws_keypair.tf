@@ -3,3 +3,4 @@ resource "aws_key_pair" "jumphost-key" {
   public_key = file ("~/.ssh/jumphost-key.pub")
 }
 
+

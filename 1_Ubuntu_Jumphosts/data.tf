@@ -5,7 +5,7 @@ data "aws_ami" "ubuntu_jumphost" {
   filter {
     name = "tag:Name"
     values = [
-      "ubuntu-jumphost",
+      "ubuntu-jumphost-Dublin",
     ]
   }
 }
