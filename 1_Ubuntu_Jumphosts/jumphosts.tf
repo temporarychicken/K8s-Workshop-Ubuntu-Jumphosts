@@ -24,11 +24,11 @@ resource "aws_instance" "jumphostn" {
 
 
 variable "instance_count" {
-  default = "2"
+  default = "1"
 }
 
-output "dnsname0" { value = "${aws_instance.jumphostn[0].public_dns}" }
-output "dnsname1" { value = "${aws_instance.jumphostn[1].public_dns}" }
+#output "dnsname0" { value = "${aws_instance.jumphostn[0].public_dns}" }
+#output "dnsname1" { value = "${aws_instance.jumphostn[1].public_dns}" }
 #output "dnsname2" { value = "${aws_instance.jumphostn[2].public_dns}" }
 #output "dnsname3" { value = "${aws_instance.jumphostn[3].public_dns}" }
 #output "dnsname4" { value = "${aws_instance.jumphostn[4].public_dns}" }
@@ -57,7 +57,7 @@ resource "null_resource" "jumphostzero" {
     connection {
     type     = "ssh"
     user     = "ubuntu"
-	private_key = file("jumphosts")
+	private_key = file("~/.ssh/jumphost-key.pem")
     host     = aws_instance.jumphostn[count.index].public_ip
   }
   
